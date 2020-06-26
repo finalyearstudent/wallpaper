@@ -1,0 +1,351 @@
+:root {
+    --setting-height: 60px;
+    --setting-font-size: 20px;
+    --setting-font-family: "幼圆";
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    overflow: hidden;
+}
+
+/* 画布 */
+
+.canvas {
+    overflow: hidden;
+    position: fixed;
+}
+
+/* 聚光灯 */
+
+body {
+    background-color: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url("../img/bg.jpg");
+    background-position: left top;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.my-font {
+    color: rgba(216, 218, 105, 0.8);
+    font-size: 10rem;
+    text-transform: uppercase;
+    position: relative;
+    top: -35vh;
+    pointer-events: none;
+}
+
+.my-font::after {
+    text-align: center;
+    content: attr(texts);
+    text-transform: uppercase;
+    color: transparent;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-image: -webkit-linear-gradient(left, #c23616, #192a56, #00d2d3, yellow, #6d214f, #2e86de, #4cd137, #e84118);
+    /* 将背景按照文本进行裁剪 */
+    background-clip: text;
+    -webkit-background-clip: text;
+    clip-path: circle(100px at 0% 50%);
+    -webkit-clip-path: circle(100px at 0% 50%);
+    animation: light 8s infinite;
+    pointer-events: none;
+}
+
+@keyframes light {
+    0% {
+        clip-path: circle(100px at 0% 50%);
+        -webkit-clip-path: circle(100px at 0% 50%);
+    }
+    50% {
+        clip-path: circle(100px at 100% 50%);
+        -webkit-clip-path: circle(100px at 100% 50%);
+    }
+    100% {
+        clip-path: circle(100px at 0% 50%);
+        -webkit-clip-path: circle(100px at 0% 50%);
+    }
+}
+
+/* 霓虹灯字体 */
+
+.my-svg {
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 200px;
+}
+
+.text {
+    font-size: 64px;
+    font-weight: bold;
+    text-transform: uppercase;
+    fill: none;
+    stroke-width: 2px;
+    stroke-dasharray: 10 30;
+    animation: stroke 10s infinite linear;
+}
+
+.text-1 {
+    stroke: #3498db;
+    text-shadow: 0 0 5px #3498db8e;
+    animation-delay: -2.5s;
+}
+
+.text-2 {
+    stroke: #f39d12;
+    text-shadow: 0 0 5px #37f312a8;
+    animation-delay: -5s;
+}
+
+.text-3 {
+    stroke: #e74d3c;
+    text-shadow: 0 0 5px #e7b13c98;
+    animation-delay: -7.5s;
+}
+
+.text-4 {
+    stroke: #9c59b6;
+    text-shadow: 0 0 5px #b659b181;
+    animation-delay: -10s;
+}
+
+@keyframes stroke {
+    100% {
+        stroke-dashoffset: -100;
+    }
+}
+
+/* 配置中心 */
+
+.setting {
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 120px;
+    right: -180px;
+    padding: 10px;
+    background-color: rgb(204, 233, 243);
+    box-shadow: inset 0 0 5px rgba(204, 233, 243, 0.767);
+    border-radius: 8px;
+    /* 显示过渡效果 */
+    transition: 0.5s;
+    -moz-transition: 0.5s;
+    /* Firefox 4 */
+    -webkit-transition: 0.5s;
+    /* Safari and Chrome */
+    -o-transition: 0.5s;
+    /* Opera */
+    z-index: 3;
+}
+
+.setting>.option {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    width: 100%;
+    height: var(--setting-height);
+    font-family: var(--setting-font-family);
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+}
+
+.setting>.option>.switch {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    width: 40%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.setting>.option>.switch>.bg {
+    box-shadow: inset 0px 0px 3px rgba(110, 110, 110, 0.726);
+    width: 80%;
+    height: 24px;
+    background-color: rgba(205, 207, 201, 0.753);
+    border-radius: 15px;
+    position: relative;
+}
+
+.setting>.option>.switch>.bg>.sw {
+    width: 24px;
+    position: absolute;
+    top: 0;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.setting>.option>.tag {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--setting-font-size);
+    text-align: center;
+}
+
+.setting>.wake {
+    font-size: 14px;
+    writing-mode: vertical-rl;
+    position: absolute;
+    width: 30px;
+    height: 40px;
+    top: 10px;
+    left: -30px;
+    background-color: rgb(74, 203, 247);
+    border-radius: 5px 0 0 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.setting:hover {
+    right: 0;
+}
+
+/* 开关关闭特效 */
+
+.setting>.option>.close>.bg>.sw {
+    box-shadow: 0 0 1px rgb(241, 55, 55);
+    background-color: rgb(241, 55, 55);
+    right: 0;
+}
+
+/* 开启特效 */
+
+.setting>.option>.open>.bg>.sw {
+    box-shadow: 0 0 1px rgb(177, 243, 22);
+    background-color: rgb(177, 243, 22);
+    left: 0;
+}
+
+/* 雨滴特效 */
+
+body.rain {
+    filter: blur(1px);
+    -webkit-filter: blur(1px);
+}
+
+/* 天气 */
+
+.window {
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100vw;
+    height: 100vh;
+    /* 背景模糊化 */
+    filter: blur(10px);
+    z-index: 999;
+    position: fixed;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+}
+
+/* 一滴雨的特效 */
+
+.a-drop-of-rain {
+    /* 背景是一个黑边椭圆 */
+    border-radius: 50% 50%;
+    background-color: transparent;
+    /* transform: rotate(180deg); */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.9);
+    position: absolute;
+    /* 使用js重新设置 */
+    /* 这里的background-positon 和 .border 里的position保持一致更加真实 */
+    /* background-position: 30% 30%;
+    background-image: url("../img/bg.jpg");
+    width: calc(100vw * 0.05 / 3);
+    height: calc(100vh * 0.05);
+    background-size: calc(100vw * 0.03 * 2) calc(100vh * 0.03 * 2);
+    left: 30%;
+    top: 30%; */
+}
+
+/* 天气介绍标签 */
+
+.weather {
+    width: 160px;
+    position: fixed;
+    top: 40vh;
+    right: -160px;
+    background-color: rgb(204, 233, 243);
+    box-shadow: inset 0 0 5px rgba(204, 233, 243, 0.767);
+    border-radius: 10px;
+    z-index: 2;
+    /* 显示过渡效果 */
+    transition: 0.5s;
+    -moz-transition: 0.5s;
+    /* Firefox 4 */
+    -webkit-transition: 0.5s;
+    /* Safari and Chrome */
+    -o-transition: 0.5s;
+    /* Opera */
+}
+
+.weather-row {
+    width: 100%;
+    height: 36px;
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.weather-row-name {
+    width: 60%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.weather-row-value {
+    width: 40%;
+    height: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.weather-show {
+    font-size: 14px;
+    writing-mode: vertical-rl;
+    width: 30px;
+    height: 40px;
+    position: absolute;
+    left: -30px;
+    top: 10px;
+    background-color: rgb(74, 203, 247);
+    border-radius: 3px 0 0 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.weather:hover {
+    right: 0;
+}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>个人定制桌面</title>
+</head>
+
+<body>
+    <!-- canvas.width 和 canvas.height 是画布的实际像素值，css的是canvas自己的大小 -->
+    <!-- 画布是fixed定位 -->
+    <canvas id="canvas" class="canvas"></canvas>
+
+    <!-- 聚光灯 -->
+    <div class="my-font" id="background-text" texts="wangboyi">
+        wangboyi
+    </div>
+
+    <!-- 霓虹灯特效时间 -->
+    <svg id="svg" class="my-svg" version="1.1" baseProfile="full" width="1920" height="200"
+        xmlns="http://www.w3.org/2000/svg">
+        <text text-anchor="middle" x="50%" y="50%" class="text text-1" id="text1">
+            11:11
+        </text>
+        <text text-anchor="middle" x="50%" y="50%" class="text text-2" id="text2">
+            11:11
+        </text>
+        <text text-anchor="middle" x="50%" y="50%" class="text text-3" id="text3">
+            11:11
+        </text>
+        <text text-anchor="middle" x="50%" y="50%" class="text text-4" id="text4">
+            11:11
+        </text>
+    </svg>
+
+    <!-- 配置中心 -->
+    <div class="setting">
+        <div class="option">
+            <div class="tag">开启气泡</div>
+            <div class="switch open">
+                <div class="bg" id="bg_bubble">
+                    <div class="sw" id="sw_bubble"></div>
+                </div>
+            </div>
+        </div>
+        <div class="option">
+            <div class="tag">时间显示</div>
+            <div class="switch open">
+                <div class="bg" id="bg_time">
+                    <div class="sw" id="sw_time"></div>
+                </div>
+            </div>
+        </div>
+        <div class="option">
+            <div class="tag">背景文字显示</div>
+            <div class="switch open">
+                <div class="bg" id="bg_text">
+                    <div class="sw" id="sw_text"></div>
+                </div>
+            </div>
+        </div>
+        <div class="option">
+            <div class="tag">实时天气展示</div>
+            <div class="switch open">
+                <div class="bg" id="bg_weather">
+                    <div class="sw" id="sw_weather"></div>
+                </div>
+            </div>
+        </div>
+        <!-- 唤醒标签 -->
+        <div class="wake">设置</div>
+    </div>
+
+    <!-- 天气模糊背景 -->
+    <div class="window" id="_window"></div>
+    <!-- 雨滴列表 -->
+    <div class="rains" id="rains">
+        <div class="a-drop-of-rain"></div>
+    </div>
+    <!-- 当前天气状况 -->
+    <div class="weather" id="weather">
+        <div class="weather-row">
+            <div class="weather-row-name">城市</div>
+            <div class="weather-row-value" id="weather_city">获取失败</div>
+        </div>
+        <div class="weather-row">
+            <div class="weather-row-name">体感温度</div>
+            <div class="weather-row-value" id="weather_body_temperature">获取失败</div>
+        </div>
+        <div class="weather-row">
+            <div class="weather-row-name">温度</div>
+            <div class="weather-row-value" id="weather_temperature">获取失败</div>
+        </div>
+        <div class="weather-row">
+            <div class="weather-row-name">天气</div>
+            <div class="weather-row-value" id="weather_weather">获取失败</div>
+        </div>
+        <div class="weather-row">
+            <div class="weather-row-name">风向</div>
+            <div class="weather-row-value" id="weather_wind_direction">获取失败</div>
+        </div>
+        <div class="weather-show">天气</div>
+    </div>
+    <div style="position: fixed;top: 10px;right: 500px;"><input type="file" title="选择文件" id="file" onchange="changefile();"></div>
+    <script>
+        function changefile(){
+            let file = document.getElementById("file")
+            console.log(file)
+        }
+        
+    </script>
+    <script src="./config/config.js"></script>
+    <script src="js/bubble.js"></script>
+</body>
+
+</html>
