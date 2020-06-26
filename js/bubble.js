@@ -146,22 +146,27 @@ function CanvasContent(maxsize, draw_interval, canvas) {
 
     // 绘制当前气泡 callback 提供绘制气泡背景后的回调接口,可以继续在画布上绘制其他东西
     this.draw_cur_bubbles = function (callback) {
-        // 绘制
-        let ctx = this.canvas.getContext('2d')
-        // 清空画布
-        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-        // 显示背景图片,直接用画布生成性能太低了
-        // ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-        if (this.content.length <= 0) {
-            return
+        if (window.configs.switch.create_bubble) {
+            document.getElementById("canvas").style.visibility = "visible"
+            // 绘制
+            let ctx = this.canvas.getContext('2d')
+            // 清空画布
+            ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+            // 显示背景图片,直接用画布生成性能太低了
+            // ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+            if (this.content.length <= 0) {
+                return
+            }
+            // 显示气泡
+            for (let index in this.content) {
+                let bubble = this.content[index]
+                this.draw_a_bubble(ctx, bubble)
+            }
+            // 更新
+            this.renew_content()
+        } else {
+            document.getElementById("canvas").style.visibility = "hidden"
         }
-        // 显示气泡
-        for (let index in this.content) {
-            let bubble = this.content[index]
-            this.draw_a_bubble(ctx, bubble)
-        }
-        // 更新
-        this.renew_content()
 
         if (typeof callback == "function") {
             // 提供插件接口
@@ -207,12 +212,8 @@ function CanvasContent(maxsize, draw_interval, canvas) {
     this.draw_a_frame = function () {
         let that = window.canvas_content
         // 气泡显示开关
-        if (window.configs.switch.create_bubble) {
-            document.getElementById("canvas").style.visibility = "visible"
-            that.draw_cur_bubbles(that.callback)
-        } else {
-            document.getElementById("canvas").style.visibility = "hidden"
-        }
+
+        that.draw_cur_bubbles(that.callback)
         // 请求下一帧
         window.requestAnimationFrame(that.draw_a_frame)
     }
@@ -231,8 +232,6 @@ function create_bubbles(canvas_content, x, y, number) {
 
 // init 函数自动生成画布，并开始绘制
 function init(configs, callback) {
-    // 设置背景
-    document.getElementsByTagName("body")[0].style.backgroundImage = "url(" + configs.bgurl + ")"
     // 配置中心增加监听器
     configs_add_listener()
     //准备画布
@@ -307,25 +306,6 @@ function getPixelRatio(context) {
     return (window.devicePixelRatio || 1) / backingStore;
 }
 
-window.onload = function () {
-    (function () {
-        // 从localstorage中读取插件开关配置
-        read_switch_configs()
-        // 更新html配置显示，气泡属性等
-        init_html_config()
-        // 初始化各类插件
-        let weather = new Show_current_weather(canvas)
-        // 绘制成功回调，每次画布刷新的回调，可以在画布上增加绘画
-        let callback_per_repaint = function (canvas) {
-            // 开启天气系统
-            weather.start()
-        }
-        // 开始启动桌面背景程序
-        init(window.configs, callback_per_repaint)
-    }())
-}
-
-
 // 特效时间展示系统，使用svg
 function Show_Time() {
     // 启动
@@ -390,19 +370,22 @@ function Show_current_weather(canvas) {
             }
             // 记录当前天气
             that.weather = info
-            document.getElementById("weather_city").textContent = info.basic.location
-            document.getElementById("weather_body_temperature").textContent = info.now.fl
-            document.getElementById("weather_temperature").textContent = info.now.tmp
-            document.getElementById("weather_weather").textContent = info.now.cond_txt
-            document.getElementById("weather_wind_direction").textContent = info.now.wind_dir
+            if (info && info.basic && info.now) {
+                document.getElementById("weather_city").textContent = info.basic.location
+                document.getElementById("weather_body_temperature").textContent = info.now.fl
+                document.getElementById("weather_temperature").textContent = info.now.tmp
+                document.getElementById("weather_weather").textContent = info.now.cond_txt
+                document.getElementById("weather_wind_direction").textContent = info.now.wind_dir
+            }
         }, false)
         xmlhttp.open("GET", api_url)
         xmlhttp.send()
     }
-    this.get_a_random_rain = function () {
+    this.get_a_random_rain = function (rain) {
+        // 从数组中获取元素进行更新
+        let random_rain = rain
         let random_x = parseInt(Math.random() * 100) % 99
         let random_y = parseInt(Math.random() * 100) % 99
-        let random_rain = document.createElement('div')
         let random_width = (1 + parseInt(Math.random() * 100) % 3) / 100
         let random_height = (1 + parseInt(Math.random() * 100) % 3) / 100
         // 保证高度比宽度大，重力
@@ -411,8 +394,6 @@ function Show_current_weather(canvas) {
             random_width = random_height
             random_height = temp
         }
-        random_rain.className = "a-drop-of-rain"
-        random_rain.style.backgroundImage = "url(" + window.configs.bgurl + ")"
         random_rain.style.width = "calc(100vh * " + random_width + ")"
         random_rain.style.height = "calc(100vh * " + random_height + ")"
         random_rain.style.backgroundSize = "calc(100vw * 0.05 * 8) calc(100vh * 0.05 * 8)"
@@ -420,7 +401,6 @@ function Show_current_weather(canvas) {
         random_rain.style.top = random_y + "%"
         random_rain.style.backgroundPositionX = random_x + "%"
         random_rain.style.backgroundPositionY = random_y + "%"
-        return random_rain
     }
     // 每帧更新纵向坐标
     this.updatePosition = function () {
@@ -438,52 +418,32 @@ function Show_current_weather(canvas) {
             return item
         })
     }
-    // 插入随机创建的雨滴
-    this.insert_rains_to_html = function () {
-        for (let index in this.rain_list) {
-            document.getElementById("rains").appendChild(this.rain_list[index])
-        }
-    }
+
     // 启动
     this.start = function () {
         let get = true
-        // 检测天气是否获取
-        if (document.getElementById("weather_city").textContent == "获取失败") {
-            if (true) {
-                get = false
-                this.get_today_weather()
-                setTimeout(() => {
-                    get = true
-                }, 1000);
-            }
-            return
-        }
+        // 只获取一次天气，增加刷新按钮，请求过多被封ip
         let that = this
         // 启动实时天气且为雨天
         if (window.configs.switch["show_weather"] && that.weather && that.weather.now && that.weather.now.cond_code[0] == "3") {
-            this.rain_list.map(function (item) {
-                item.style.visibility = "visible"
-            })
+            document.getElementById("rains").style.display = "block"
             document.getElementById("_window").style.backgroundColor = window.configs.weather.bg_color
             document.getElementById("_window").style.filter = "blur(10px)"
             // 开始每帧更新坐标
             this.updatePosition()
         } else {
             // 关闭天气展示
-            this.rain_list.map(function (item) {
-                item.style.visibility = "hidden"
-            })
+            document.getElementById("rains").style.display = "none"
             document.getElementById("_window").style.filter = "unset"
             document.getElementById("_window").style.backgroundColor = "transparent"
         }
     }
 
-    // 在html里添加元素
-    // 随机创建雨滴
-    for (let i = 0; i < window.configs.weather.rain_number; i++) {
-        this.rain_list.push(this.get_a_random_rain())
-    }
-    this.insert_rains_to_html()
+    // 从html里获取元素
+    this.rain_list = Array.from(document.getElementById("rains").children)
+    this.rain_list.forEach((item) => {
+        this.get_a_random_rain(item)
+    })
     // 获取今天的天气
     this.get_today_weather()
 }

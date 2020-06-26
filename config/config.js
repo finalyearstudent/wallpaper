@@ -1,3 +1,7 @@
+/**
+ * @deprecated
+ * @description 此文件作废，请从桌面打开配置向导进行配置
+ */
 (function () {
     // 将配置挂载在window下
     window.configs = {
@@ -28,7 +32,7 @@
         // 天气显示
         weather: {
             // 雨滴数量
-            rain_number: 20,
+            // rain_number: 10,
             // 雨滴流速
             rain_speed: 1,
             // 雨天模糊层颜色

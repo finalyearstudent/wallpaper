@@ -349,3 +349,225 @@ body.rain {
 .weather:hover {
     right: 0;
 }
+
+/* 配置向导 */
+
+.config-guide {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    background-color: blanchedalmond;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.config-guide:hover {
+    animation: guide infinite 2s;
+}
+
+/* 向导提示 */
+
+.config-guide:hover::after {
+    position: absolute;
+    width: 200px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: -36px;
+    left: -200px;
+    font-size: 14px;
+    content: "点击此按钮进入配置向导";
+    border: 1px sollid wheat;
+    background-color: whitesmoke;
+    border-radius: 5px;
+}
+
+@keyframes guide {
+    0% {
+        background-color: rgba(255, 235, 205, 0.651);
+        width: 36px;
+        height: 36px;
+        box-shadow: 0 0 0 transparent;
+    }
+    50% {
+        background-color: rgba(255, 235, 205, 0.651);
+        width: 40px;
+        height: 40px;
+        box-shadow: 0 0 5px rgb(250, 226, 190);
+    }
+    100% {
+        background-color: rgba(255, 235, 205, 0.651);
+        width: 36px;
+        height: 36px;
+        box-shadow: 0 0 0 transparent;
+    }
+}
+
+.guide-main {
+    width: 640px;
+    height: 320px;
+    z-index: 99999;
+    background-color: rgba(245, 245, 245, 0.7);
+    position: fixed;
+    left: calc(50% - 320px);
+    top: calc(50% - 160px);
+    border-radius: 10px;
+    font-size: "楷体";
+    display: none;
+}
+
+.guide-page {
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 2;
+}
+
+/* 有此类的页才会显示 */
+
+.guide-page-show {
+    display: block;
+}
+
+.guide-title {
+    width: 100%;
+    height: 20%;
+    background-color: rgba(76, 76, 245, 0.897);
+    border-radius: 10px 10px 0 0;
+    font-size: 24px;
+    font-family: "黑体";
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.guide-content {
+    padding: 10px;
+    width: calc(100% - 20px);
+    height: calc(80% - 20px);
+    border-radius: 0 0 10px 10px;
+    font-size: 16px;
+    position: relative;
+}
+
+.guide-next-step {
+    width: 10%;
+    height: 10%;
+    background-color: rgb(247, 247, 196);
+    border: 1px solid grey;
+    box-shadow: 0 0 5px grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    bottom: 10px;
+    border-radius: 5px;
+}
+
+#bgImg {
+    display: none;
+}
+
+.choose-bgImg {
+    background-color: #c23616;
+    display: block;
+    width: 100px;
+    text-align: center;
+}
+
+.img-preview {
+    max-width: 50%;
+    max-height: 50%;
+    display: none;
+}
+
+.guide-close {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    width: 16px;
+    height: 16px;
+    background-color: rgba(250, 146, 61, 0.829);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+}
+
+.guide-mask {
+    z-index: -1;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+/* 加载特效 */
+
+.loading {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: top;
+    background-color: rgba(216, 218, 105, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.loading>li {
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgb(0, 217, 255);
+    position: relative;
+    animation: jump 4s infinite;
+    flex-direction: row;
+    margin: 10px;
+}
+
+.loading>li:nth-child(1) {
+    animation-delay: 0;
+}
+
+.loading>li:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.loading>li:nth-child(3) {
+    animation-delay: 1s;
+}
+
+.loading>li:nth-child(4) {
+    animation-delay: 1.5s;
+}
+
+@keyframes jump {
+    0% {
+        bottom: 0;
+    }
+    50% {
+        bottom: 20px;
+    }
+    100% {
+        bottom: 0;
+    }
+}

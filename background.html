@@ -78,6 +78,25 @@
     <!-- 雨滴列表 -->
     <div class="rains" id="rains">
         <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
+        <div class="a-drop-of-rain"></div>
     </div>
     <!-- 当前天气状况 -->
     <div class="weather" id="weather">
@@ -103,16 +122,58 @@
         </div>
         <div class="weather-show">天气</div>
     </div>
-    <div style="position: fixed;top: 10px;right: 500px;"><input type="file" title="选择文件" id="file" onchange="changefile();"></div>
-    <script>
-        function changefile(){
-            let file = document.getElementById("file")
-            console.log(file)
-        }
-        
-    </script>
+    <!-- 配置向导按钮-->
+    <div class="config-guide" onclick="openConfigGuide();"></div>
+    <!-- 配置向导窗口 -->
+    <div class="guide-main" id="guide-main">
+        <!-- 第一页 -->
+        <div class="guide-page guide-page-show">
+            <div class="guide-title">欢迎进入配置向导</div>
+            <div class="guide-content">这将花费你一分钟时间，点击下一步开始进行配置。
+                <div class="guide-next-step">开始配置</div>
+            </div>
+        </div>
+        <div class="guide-page">
+            <div class="guide-title">请选择图片设置为背景</div>
+            <div class="guide-content">
+                请选择分辨率和屏幕相匹配的壁纸，否则效果不佳。
+                <label for="bgImg" class="choose-bgImg">点击此处选择壁纸</label>
+                <img class="img-preview" id="img-preview" title="背景预览" id="img-preview"></img>
+                <input type="file" title="选择壁纸图片" id="bgImg" onchange="preview_bgimg();">
+                <div class="guide-next-step">下一步</div>
+            </div>
+        </div>
+        <div class="guide-page">
+            <div class="guide-title">请选择你所在的城市</div>
+            <div class="guide-content">
+                <div class="guide-next-step">下一步</div>
+            </div>
+        </div>
+        <div class="guide-page">
+            <div class="guide-title">点击完成记录你的配置</div>
+            <div class="guide-content">
+                <div class="guide-next-step">完成</div>
+            </div>
+        </div>
+        <!-- 关闭按钮 -->
+        <div class="guide-close" onclick="closeGuide();">×</div>
+        <!-- mask层 -->
+        <div class="guide-mask"></div>
+    </div>
+
+    <!-- 加载特效 -->
+    <div class="loading" id="loading">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </div>
+
+    <script src="js/connectIndexDB.js"></script>
+    <script src="js/config_guide.js"></script>
     <script src="./config/config.js"></script>
     <script src="js/bubble.js"></script>
+    <script src="js/init.js"></script>
 </body>
 
 </html>
