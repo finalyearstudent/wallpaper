@@ -193,9 +193,27 @@ function CanvasContent(maxsize, draw_interval, canvas) {
         let that = this
         // 储存回调，方便draw_a_frame直接获取
         that.callback = callback
+        // 鼠标停留处一直产生气泡
+        that.mouse_create_bubbles()
+        // 使用60帧的接口，直接使用setinterval在长时间后会出现计时问题
+        window.requestAnimationFrame(that.draw_a_frame)
+    }
 
-        // 鼠标最后停留位置一直产生气泡
-        setInterval(() => {
+    let count = 0
+    let starTime = new Date().getTime()
+    this.mouse_create_bubbles = function () {
+        let that = this
+        let interval = setInterval(() => {
+            // 计数
+            count++
+            let curTime = new Date().getTime()
+            // console.log(count + " " + (curTime - starTime - window.configs.mousehover_bubble_interval * count))
+            if (curTime - starTime - window.configs.mousehover_bubble_interval * count > 100) {
+                window.clearInterval(interval)
+                count = 0
+                starTime = new Date().getTime()
+                that.mouse_create_bubbles()
+            }
             let diffrence = window.configs.mousehover_bubble_number[1] - window.configs.mousehover_bubble_number[0] + 1
             let number = window.configs.mousehover_bubble_number[0] + parseInt(Math.random() * 1000) % diffrence
             // 读取配置，是否生成气泡
@@ -203,16 +221,12 @@ function CanvasContent(maxsize, draw_interval, canvas) {
                 create_bubbles(that, that.mouse.x, that.mouse.y, number)
             }
         }, window.configs.mousehover_bubble_interval);
-
-        // 使用60帧的接口，直接使用setinterval在长时间后会出现计时问题
-        window.requestAnimationFrame(that.draw_a_frame)
     }
 
     // 气泡绘制的一帧显示
     this.draw_a_frame = function () {
         let that = window.canvas_content
         // 气泡显示开关
-
         that.draw_cur_bubbles(that.callback)
         // 请求下一帧
         window.requestAnimationFrame(that.draw_a_frame)

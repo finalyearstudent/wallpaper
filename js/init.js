@@ -1,37 +1,41 @@
 window.onload = function () {
-    let dbname = "wallpaper-wby"
-    let version = 1
-    // 声明缓存
-    window.cache = {
+    // 展示加载效果
+    setTimeout(() => {
+        let dbname = "wallpaper-wby"
+        let version = 1
+        // 声明缓存
+        window.cache = {
 
-    }
-    init_bg(dbname, version)
-    // 在之前要把所有配置从数据库中读取出来
-    get_bgurl(dbname, version, function (bgurl) {
-        // 如果储存了图像
-        if (bgurl) {
-            configs.bgurl = bgurl
         }
-        // 设置背景
-        document.getElementsByTagName("body")[0].style.backgroundImage = "url(" + configs.bgurl + ")"
-        // 从localstorage中读取插件开关配置
-        read_switch_configs()
-        // 更新html配置显示，气泡属性等
-        init_html_config()
-        // 初始化各类插件
-        let weather = new Show_current_weather(canvas)
-        // 绘制成功回调，每次画布刷新的回调，可以在画布上增加绘画
-        let callback_per_repaint = function (canvas) {
-            // 开启天气系统
-            weather.start()
-        }
-        // 初始化各种按钮
-        init_buttons()
-        // 开始启动桌面背景程序
-        init(window.configs, callback_per_repaint)
-        // 启动完成
-        document.getElementById("loading").style.display = "none"
-    })
+        init_bg(dbname, version)
+        // 在之前要把所有配置从数据库中读取出来
+        get_bgurl(dbname, version, function (bgurl) {
+            // 如果储存了图像
+            if (bgurl) {
+                configs.bgurl = bgurl
+            }
+            // 设置背景
+            document.getElementsByTagName("body")[0].style.backgroundImage = "url(" + configs.bgurl + ")"
+            // 从localstorage中读取插件开关配置
+            read_switch_configs()
+            // 更新html配置显示，气泡属性等
+            init_html_config()
+            // 初始化各类插件
+            let weather = new Show_current_weather(canvas)
+            // 绘制成功回调，每次画布刷新的回调，可以在画布上增加绘画
+            let callback_per_repaint = function (canvas) {
+                // 开启天气系统
+                weather.start()
+            }
+            // 初始化各种按钮
+            init_buttons()
+            // 开始启动桌面背景程序
+            init(window.configs, callback_per_repaint)
+            // 启动完成
+            document.getElementById("loading").style.display = "none"
+        })
+    }, 2000);
+
 }
 
 function init_buttons() {
@@ -62,7 +66,6 @@ function init_buttons() {
             }, 200)
         })
     })
-
 }
 
 // 背景预览

@@ -1,6 +1,6 @@
 /**
  * @deprecated
- * @description 此文件作废，请从桌面打开配置向导进行配置
+ * @description 此文件请勿修改，请从桌面打开配置向导进行配置
  */
 (function () {
     // 将配置挂载在window下
