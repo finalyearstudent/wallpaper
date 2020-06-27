@@ -1,19 +1,20 @@
 // 添加背景数据数据库
-function add_bg(dbname, version, value) {
+function add_bg(dbname, version, bgurl, city) {
     let request = window.indexedDB.open(dbname, version)
     request.onsuccess = function (event) {
         db = event.target.result;
         db.transaction(['background'], 'readwrite')
             .objectStore("background").put({
                 id: "1",
-                bgurl: value
+                bgurl: bgurl,
+                city: city
             })
     }
     request.onerror = function () {
         console.error("数据库连接错误")
     }
 }
-// 获取背景url
+// 获取背景url和城市名称
 function get_bgurl(dbname, version, callback) {
     let request = window.indexedDB.open(dbname, version)
     request.onsuccess = function (event) {
@@ -23,18 +24,18 @@ function get_bgurl(dbname, version, callback) {
         let request = objectStore.get("1");
         request.onsuccess = function (event) {
             if (request.result) {
-                callback(request.result["bgurl"])
+                callback(request.result["bgurl"], request.result["city"])
             } else {
-                callback(false)
+                callback(false, false)
             }
         };
         request.onerror = function (event) {
-            callback(false)
+            callback(false, false)
         }
     }
     request.onerror = function () {
         console.error("数据库连接错误")
-        callback(false)
+        callback(false, false)
     }
 }
 

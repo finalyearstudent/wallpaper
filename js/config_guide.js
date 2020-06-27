@@ -10,6 +10,4 @@ function closeGuide() {
         item.className = item.className.replace(/\s*guide-page-show/, '')
     })
     guide_page[0].className += " guide-page-show"
-    // 清空缓存
-    window.cache = {}
 }

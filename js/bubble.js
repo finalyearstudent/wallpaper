@@ -146,6 +146,7 @@ function CanvasContent(maxsize, draw_interval, canvas) {
 
     // 绘制当前气泡 callback 提供绘制气泡背景后的回调接口,可以继续在画布上绘制其他东西
     this.draw_cur_bubbles = function (callback) {
+        // 是否开启绘制气泡，不绘制时，请求帧接口还是在执行
         if (window.configs.switch.create_bubble) {
             document.getElementById("canvas").style.visibility = "visible"
             // 绘制
@@ -191,6 +192,8 @@ function CanvasContent(maxsize, draw_interval, canvas) {
     // 开始自动绘制
     this.start_draw = function (callback) {
         let that = this
+        // 记录创建的帧数
+        window.count = 0
         // 储存回调，方便draw_a_frame直接获取
         that.callback = callback
         // 鼠标停留处一直产生气泡
@@ -225,6 +228,12 @@ function CanvasContent(maxsize, draw_interval, canvas) {
 
     // 气泡绘制的一帧显示
     this.draw_a_frame = function () {
+        window.count++
+        if (window.count >= 60000) {
+            // 一个小时重新请求一次天气
+            reload_weather()
+            window.count = 0
+        }
         let that = window.canvas_content
         // 气泡显示开关
         that.draw_cur_bubbles(that.callback)
@@ -367,6 +376,15 @@ function Show_Time() {
     }
 }
 
+// 刷新天气信息
+function reload_weather() {
+    window.weather.get_today_weather()
+    // 提示更新成功
+    document.getElementById("reload_weather").setAttribute("tip", "刷新成功")
+    setTimeout(() => {
+        document.getElementById("reload_weather").setAttribute("tip", "点击进行刷新天气")
+    }, 1000);
+}
 
 // 实时天气背景展示系统
 function Show_current_weather(canvas) {
@@ -374,12 +392,13 @@ function Show_current_weather(canvas) {
     this.failTime = 0
     this.get_today_weather = function () {
         let that = this
-        let api_url = "https://free-api.heweather.net/s6/weather/now?location=auto_ip&key=355e24bd23a940fcb095df117ebd463d"
+        let api_url = "https://free-api.heweather.net/s6/weather/now?location=" + window.cache.city + "&key=355e24bd23a940fcb095df117ebd463d"
         let xmlhttp = new XMLHttpRequest()
         xmlhttp.addEventListener("load", function () {
             // 将string转化为json
             let info = JSON.parse(this.responseText)
             for (let key in info) {
+                // 优选第一个
                 info = info[key][0]
             }
             // 记录当前天气
@@ -540,4 +559,9 @@ function change_switch(id) {
     else {
         window.localStorage.setItem(SW_MAP[id], true)
     }
+}
+
+// 更新壁纸
+function change_bg(url) {
+    document.getElementsByTagName("body")[0].style.backgroundImage = "url(" + url + ")"
 }
