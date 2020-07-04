@@ -261,13 +261,14 @@ body.rain {
     left: 0;
     top: 0;
     pointer-events: none;
+    display: none;
 }
 
 /* 一滴雨的特效 */
 
 .a-drop-of-rain {
     /* 背景是一个黑边椭圆 */
-    border-radius: 50% 50%;
+    border-radius: 100%;
     background-color: transparent;
     /* transform: rotate(180deg); */
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.9);
@@ -281,6 +282,23 @@ body.rain {
     background-size: calc(100vw * 0.03 * 2) calc(100vh * 0.03 * 2);
     left: 30%;
     top: 30%; */
+    filter: brightness(1.2);
+    -webkit-filter: brightness(1.2);
+    animation: falling 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    opacity: 0;
+}
+
+/* 雨滴撞击玻璃 */
+
+@keyframes falling {
+    0% {
+        opacity: 0;
+        transform: rotate(180deg) scale(2.5, 2.3) rotateY(0);
+    }
+    100% {
+        opacity: 1;
+        transform: rotate(180deg) scale(1, 1) rotateY(0);
+    }
 }
 
 /* 天气介绍标签 */
@@ -321,7 +339,7 @@ body.rain {
     border-radius: 5px;
 }
 
-.weather-reload:hover::after{
+.weather-reload:hover::after {
     content: attr(tip);
     position: absolute;
     top: -37px;
@@ -600,7 +618,9 @@ body.rain {
     overflow-y: scroll;
     visibility: hidden;
 }
+
 /* wallpaper engine 不能监听滚动事件 */
+
 /* .guide-content-option-list::-webkit-scrollbar {
     width: 0 !important
 } */
@@ -626,7 +646,7 @@ body.rain {
     left: 0;
     top: 0;
     z-index: top;
-    background-color: rgba(216, 218, 105, 1);
+    background-color: rgb(245, 199, 130);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -634,46 +654,41 @@ body.rain {
     height: 100vh;
 }
 
-.loading>li {
-    display: block;
-    float: left;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background-color: rgb(0, 217, 255);
+.loader {
     position: relative;
-    animation: jump 4s infinite;
-    flex-direction: row;
-    margin: 10px;
+    width: 200px;
+    height: 200px;
+    filter: url(#gooey);
 }
 
-.loading>li:nth-child(1) {
-    animation-delay: 0;
+.loader span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    animation: loading 3s ease-in-out infinite;
+    animation-delay: calc(0.2s * var(--i));
 }
 
-.loading>li:nth-child(2) {
-    animation-delay: 0.5s;
+.loader span::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(#fce4ec, #03a9f4);
+    border-radius: 50%;
+    box-shadow: 0 0 30px #03a9f4;
 }
 
-.loading>li:nth-child(3) {
-    animation-delay: 1s;
-}
-
-.loading>li:nth-child(4) {
-    animation-delay: 1.5s;
-}
-
-@keyframes jump {
+@keyframes loading {
     0% {
-        bottom: 0;
-    }
-    50% {
-        bottom: 20px;
+        transform: rotate(0deg);
     }
     100% {
-        bottom: 0;
+        transform: rotate(360deg);
     }
 }

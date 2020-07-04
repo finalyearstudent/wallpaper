@@ -211,7 +211,7 @@ function CanvasContent(maxsize, draw_interval, canvas) {
             count++
             let curTime = new Date().getTime()
             // console.log(count + " " + (curTime - starTime - window.configs.mousehover_bubble_interval * count))
-            if (curTime - starTime - window.configs.mousehover_bubble_interval * count > 100) {
+            if (curTime - starTime - window.configs.mousehover_bubble_interval * count > 33) {
                 window.clearInterval(interval)
                 count = 0
                 starTime = new Date().getTime()
@@ -279,6 +279,7 @@ function init(configs, callback) {
     window.canvas_content = canvas_content
     // 添加鼠标hover事件
     canvas.addEventListener('mousemove', (e) => {
+        // let startTime = new Date().getTime()
         // 防抖
         if (!trigger) {
             trigger = true
@@ -294,6 +295,9 @@ function init(configs, callback) {
                 let diffrence = window.configs.bubble_create_number[1] - window.configs.bubble_create_number[0] + 1
                 let number = window.configs.bubble_create_number[0] + parseInt(Math.random() * 1000) % diffrence
                 create_bubbles(canvas_content, e.offsetX, e.offsetY, number)
+                // let curTime = new Date().getTime()
+                // console.log("当前时间差:", curTime - startTime)
+                // startTime = curTime
             }
         }
     })
@@ -414,13 +418,16 @@ function Show_current_weather(canvas) {
         xmlhttp.open("GET", api_url)
         xmlhttp.send()
     }
-    this.get_a_random_rain = function (rain) {
+    this.get_a_random_rain = function () {
+        // 生成一滴雨
+        let random_rain = document.createElement("div")
+        random_rain.className = "a-drop-of-rain"
         // 从数组中获取元素进行更新
-        let random_rain = rain
-        let random_x = parseInt(Math.random() * 100) % 99
-        let random_y = parseInt(Math.random() * 100) % 99
-        let random_width = (1 + parseInt(Math.random() * 100) % 3) / 100
-        let random_height = (1 + parseInt(Math.random() * 100) % 3) / 100
+        let random_x = parseInt(Math.random() * 1000) % 100
+        let random_y = parseInt(Math.random() * 1000) % 100
+        let random_width = (8 + parseInt(Math.random() * 100) % 13) / 1000
+        let random_height = (15 + parseInt(Math.random() * 100) % 11) / 1000
+        let animationDelay = 500 + parseInt(Math.random() * 100000) % 9999
         // 保证高度比宽度大，重力
         if (random_height < random_width) {
             let temp = random_width
@@ -434,17 +441,24 @@ function Show_current_weather(canvas) {
         random_rain.style.top = random_y + "%"
         random_rain.style.backgroundPositionX = random_x + "%"
         random_rain.style.backgroundPositionY = random_y + "%"
+        random_rain.style.animationDelay = animationDelay + "ms"
+
+        // 插入html
+        document.getElementById("rains").appendChild(random_rain)
+        // 保存到缓存
+        this.rain_list.push(random_rain)
     }
-    // 每帧更新纵向坐标
+    // 
     this.updatePosition = function () {
         this.rain_list.map(function (item) {
             let top = item.style.top
             let last_Y = parseFloat(top.match(/\d*.*\d*/)[0])
-            let cur_Y = last_Y + (window.configs.weather.rain_speed / 30)
+            let cur_Y = last_Y + (window.configs.weather.rain_speed / 60)
             if (cur_Y > 99) {
-                cur_Y = -10
+                cur_Y = parseInt(Math.random() * 100) % 99
                 item.style.left = (parseInt(Math.random() * 100) % 99) + "%"
                 item.style.backgroundPositionX = (parseInt(Math.random() * 100) % 99) + "%"
+                item.style.animation = "falling 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;"
             }
             item.style.backgroundPositionY = cur_Y + "%"
             item.style.top = cur_Y + "%"
@@ -454,29 +468,30 @@ function Show_current_weather(canvas) {
 
     // 启动
     this.start = function () {
-        let get = true
         // 只获取一次天气，增加刷新按钮，请求过多被封ip
         let that = this
-        // 启动实时天气且为雨天
+        // 启动实时天气、天气获取成功且为雨天
         if (window.configs.switch["show_weather"] && that.weather && that.weather.now && that.weather.now.cond_code[0] == "3") {
             document.getElementById("rains").style.display = "block"
             document.getElementById("_window").style.backgroundColor = window.configs.weather.bg_color
             document.getElementById("_window").style.filter = "blur(10px)"
+            document.getElementById("_window").style.display = "block"
             // 开始每帧更新坐标
             this.updatePosition()
         } else {
             // 关闭天气展示
+            document.getElementById("_window").style.display = "none"
             document.getElementById("rains").style.display = "none"
             document.getElementById("_window").style.filter = "unset"
             document.getElementById("_window").style.backgroundColor = "transparent"
         }
     }
 
-    // 从html里获取元素
-    this.rain_list = Array.from(document.getElementById("rains").children)
-    this.rain_list.forEach((item) => {
-        this.get_a_random_rain(item)
-    })
+    // 创建雨滴
+    for (let i = 0; i < window.configs.weather.rain_number; i++) {
+        this.get_a_random_rain()
+    }
+
     // 获取今天的天气
     this.get_today_weather()
 }

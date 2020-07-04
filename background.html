@@ -76,28 +76,7 @@
     <!-- 天气模糊背景 -->
     <div class="window" id="_window"></div>
     <!-- 雨滴列表 -->
-    <div class="rains" id="rains">
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-        <div class="a-drop-of-rain"></div>
-    </div>
+    <div class="rains" id="rains"></div>
     <!-- 当前天气状况 -->
     <div class="weather" id="weather">
         <div class="weather-row">
@@ -186,12 +165,30 @@
     </div>
 
     <!-- 加载特效 -->
-    <div class="loading" id="loading">
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
+
+    <div class="loading" id="loading"> 
+        <div class="loader">
+            <span style="--i:1"></span>
+            <span style="--i:2"></span>
+            <span style="--i:3"></span>
+            <span style="--i:4"></span>
+            <span style="--i:5"></span>
+            <span style="--i:6"></span>
+            <span style="--i:7"></span>
+        </div>
     </div>
+
+    <svg style="display: none;">
+        <filter id="gooey">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
+            <feColorMatrix values="
+            1 0 0 0 0
+            0 1 0 0 0
+            0 0 1 0 0
+            0 0 0 20 -10
+            " />
+        </filter>
+    </svg>
 
     <script src="js/connectIndexDB.js"></script>
     <script src="js/config_guide.js"></script>
