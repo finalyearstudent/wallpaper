@@ -32,7 +32,7 @@
         // 天气显示
         weather: {
             // 雨滴数量
-            // rain_number: 10,
+            rain_number: 20,
             // 雨滴流速
             rain_speed: 1,
             // 雨天模糊层颜色
