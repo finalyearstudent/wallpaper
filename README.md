@@ -1,5 +1,6 @@
 # wallpaper engine html 动态桌面
-[TOC]
+## 项目背景介绍
+使用html实现一个私人定制的桌面，使用wallpaper engine打开
 ## 项目目录介绍
 \-desktopwallpaper 根目录
     \-config 配置文件
