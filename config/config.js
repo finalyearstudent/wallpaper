@@ -8,8 +8,8 @@
         // 背景文字
         "background-text": "今天你学习了吗？",
         // 背景图片绝对路径或相对路径
-        bgurl: './img/bg2.jpg',
-        // 泡泡总个数
+        // bgurl: './img/bg2.jpg',
+        // 泡泡最大总个数
         bubble_number: 666,
         // 鼠标移动处的随机产生气泡个数
         bubble_create_number: [2, 10],
