@@ -40,8 +40,7 @@ window.onload = function () {
             // 启动完成
             document.getElementById("loading").style.display = "none"
         })
-    }, 3000);
-
+    }, 4000);
 }
 
 function init_buttons() {

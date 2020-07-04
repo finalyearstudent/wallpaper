@@ -475,10 +475,12 @@ function Show_current_weather(canvas) {
             document.getElementById("rains").style.display = "block"
             document.getElementById("_window").style.backgroundColor = window.configs.weather.bg_color
             document.getElementById("_window").style.filter = "blur(10px)"
+            document.getElementById("_window").style.display = "block"
             // 开始每帧更新坐标
             this.updatePosition()
         } else {
             // 关闭天气展示
+            document.getElementById("_window").style.display = "none"
             document.getElementById("rains").style.display = "none"
             document.getElementById("_window").style.filter = "unset"
             document.getElementById("_window").style.backgroundColor = "transparent"
